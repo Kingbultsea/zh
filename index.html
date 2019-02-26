@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <input id="i" />
+    <button onclick="zz()">submit</button>
+    <canvas width="800" height="500" id="my_canvas"></canvas>
+    <canvas width="800" height="500" id="my_canvas2"></canvas>
+    <div id="container"></div>
+    <script src="./wordcloud2.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        function zz () {
+            const v = document.getElementById('i').value
+            axios.get('./data/2019-02-26-' + v + '.json')
+                .then(function (response) {
+                    WordCloud(document.getElementById('my_canvas'), { list: response.data.questions, weightFactor: 5, minSize: 8})
+                    WordCloud(document.getElementById('my_canvas2'), { list: response.data.article, weightFactor: 5, minSize: 8})
+                    let saveDom = ''
+                    console.log(response.data)
+                    for (let i in response.data.user) {
+                        saveDom += `<p style="color: #d102f9">${i}${response.data.user[i]}</p>`
+                    }
+                    document.getElementById('container').innerHTML = saveDom
+                    // console.log(response.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
